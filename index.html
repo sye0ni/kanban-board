@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Kanban Board</h1>
+    <div class="user-info">
+      <span id="user-email"></span>
+      <button id="logout-btn">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="board">
+    <section class="column" data-status="todo">
+      <div class="column-header">
+        <span class="column-title">To-do</span>
+        <span class="badge">0</span>
+      </div>
+      <div class="cards">
+        <p class="empty-placeholder">카드가 없습니다</p>
+      </div>
+      <button class="add-card-btn">+ 카드 추가</button>
+    </section>
+
+    <section class="column" data-status="inprogress">
+      <div class="column-header">
+        <span class="column-title">In-progress</span>
+        <span class="badge">0</span>
+      </div>
+      <div class="cards">
+        <p class="empty-placeholder">카드가 없습니다</p>
+      </div>
+      <button class="add-card-btn">+ 카드 추가</button>
+    </section>
+
+    <section class="column" data-status="done">
+      <div class="column-header">
+        <span class="column-title">Done</span>
+        <span class="badge">0</span>
+      </div>
+      <div class="cards">
+        <p class="empty-placeholder">카드가 없습니다</p>
+      </div>
+      <button class="add-card-btn">+ 카드 추가</button>
+    </section>
+  </main>
+
+  <!-- 카드 추가 모달 -->
+  <div id="card-modal" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+      <div class="modal-header">
+        <h2 id="modal-heading">카드 추가</h2>
+        <button id="modal-close" class="modal-close" aria-label="닫기">×</button>
+      </div>
+      <div class="modal-body">
+        <label for="modal-title-input">제목 <span class="required">*</span></label>
+        <input type="text" id="modal-title-input" placeholder="카드 제목을 입력하세요" maxlength="200" />
+        <label for="modal-desc-input">설명</label>
+        <textarea id="modal-desc-input" placeholder="설명을 입력하세요 (선택)" rows="3" maxlength="500"></textarea>
+        <label>우선순위</label>
+        <div class="priority-selector">
+          <button class="priority-btn" data-priority="high">높음</button>
+          <button class="priority-btn selected" data-priority="medium">중간</button>
+          <button class="priority-btn" data-priority="low">낮음</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-cancel-btn" class="btn-cancel">취소</button>
+        <button id="modal-submit-btn" class="btn-submit">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
