@@ -1,4 +1,4 @@
-let supabase;
+let _db;
 let currentUser;
 let draggedCard    = null;
 let modalTargetCol = null;
@@ -23,7 +23,7 @@ function updateBadges() {
 // ── Supabase CRUD ──────────────────────────────────────────────────────────
 
 async function loadCards() {
-  const { data, error } = await supabase
+  const { data, error } = await _db
     .from('cards')
     .select('*')
     .eq('user_id', currentUser.id)
@@ -43,7 +43,7 @@ async function loadCards() {
 
 async function dbAddCard(title, desc, status, priority) {
   const position = document.querySelectorAll(`.column[data-status="${status}"] .card`).length;
-  const { data, error } = await supabase
+  const { data, error } = await _db
     .from('cards')
     .insert({ user_id: currentUser.id, title, description: desc, status, priority, position })
     .select()
@@ -53,12 +53,12 @@ async function dbAddCard(title, desc, status, priority) {
 }
 
 async function dbDeleteCard(dbId) {
-  const { error } = await supabase.from('cards').delete().eq('id', dbId);
+  const { error } = await _db.from('cards').delete().eq('id', dbId);
   if (error) console.error('dbDeleteCard:', error);
 }
 
 async function dbUpdateCard(dbId, fields) {
-  const { error } = await supabase.from('cards').update(fields).eq('id', dbId);
+  const { error } = await _db.from('cards').update(fields).eq('id', dbId);
   if (error) console.error('dbUpdateCard:', error);
 }
 
@@ -68,7 +68,7 @@ async function dbUpdatePositions(statusList) {
     [...new Set(statusList)].flatMap(status => {
       const cards = [...document.querySelectorAll(`.column[data-status="${status}"] .card`)];
       return cards.map((card, i) =>
-        supabase.from('cards').update({ status, position: i }).eq('id', card.dataset.dbId)
+        _db.from('cards').update({ status, position: i }).eq('id', card.dataset.dbId)
       );
     })
   );
@@ -340,7 +340,7 @@ function initModal() {
 // ── 초기화 ────────────────────────────────────────────────────────────────
 
 async function init() {
-  supabase = window._supabase;
+  _db = window._supabase;
 
   // 세션 확인 — 없으면 login.html 로 이동
   currentUser = await requireAuth();
